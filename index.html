@@ -7,13 +7,23 @@
 	<meta name="viewport" content="width=device-width, initial-scale=1.0">
 	<script src='script.js' defer></script>
 	<title>Lab 04</title>
-	<!-- <link href="https://unpkg.com/tailwindcss@^2/dist/tailwind.min.css" rel="stylesheet"> -->
+	<link href="https://unpkg.com/tailwindcss@^2/dist/tailwind.min.css" rel="stylesheet">
 </head>
 
-<body>
-	<h1>Minimal Todo List</h1>
-	<input  type='text'>
-	<button>+</button>
+<body class = "bg-red-200 font-serif antialiased">
+	<div class = "flex flex-col max-w-screen-md mx-auto p-4 space-y-4">
+		<div class = "self-center text-4xl font-black">
+			<h1>Minimal Todo List</h1>
+		</div>
+		<div class = "flex justify-center space-x-4">
+			<input class = "p-2 focus:ring-2 ring-red-600 border border-transparent focus:border-red-500 outline-none rounded-xl placeholder-red-500 placeholder-opacity-40 shadow-md w-full" placeholder = "@To do something" type='text' onkeyup="enterTodoList(event)">
+			<button class = "text-white bg-red-600 hover:bg-red-700 rounded-xl shadow-md h-auto w-1/12 font-black text-md focus:ring-2 focus:ring-red-600 ring-offset-2 ring-offset-red-200 focus:ring-opacity-50 focus:outline-none " onclick = "addTodoList()">Add</button>
+		</div>
+		<div id="field">
+			<div class="divide-y divide-red-400" id="todoList"></div>
+			<div class="divide-y divide-red-400" id="finishList"></div>
+		</div>
+	</div>
 </body>
 
 </html>
