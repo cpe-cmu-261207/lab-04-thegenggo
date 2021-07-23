@@ -1,15 +1,15 @@
 /* Your code here */
-let todo = {todoList:[], finishList: []}
+let todo = { todoList: [], finishList: [] }
 
 const enterTodoList = (ev) => {
-    if(ev.key === "Enter") addTodoList();
+    if (ev.key === "Enter") addTodoList();
 }
 
 const loadFromStorage = () => {
-    if(localStorage.todo){
+    if (localStorage.todo) {
         todo = JSON.parse(localStorage.todo)
     }
-    if(todo.todoList[0] && todo.finishList[0]){
+    if (todo.todoList[0] && todo.finishList[0]) {
         document.getElementById("field").classList.add("divide-y")
         document.getElementById("field").classList.add("divide-red-400")
     } else {
@@ -18,12 +18,15 @@ const loadFromStorage = () => {
     }
     document.getElementById("todoList").innerHTML = ""
     document.getElementById("finishList").innerHTML = ""
-    for(let x in todo.todoList){
-        loadTodoList(todo.todoList[x], x)
+    let lastTodoList
+    let lastFinishList
+    for (let x in todo.todoList) {
+        lastTodoList = loadTodoList(todo.todoList[x], x)
     }
-    for(let x in todo.finishList){
-        loadFinishList(todo.finishList[x])
+    for (let x in todo.finishList) {
+        lastFinishList = loadFinishList(todo.finishList[x])
     }
+    return { lastFinishList, lastTodoList }
 }
 
 const saveToStorage = () => {
@@ -32,16 +35,26 @@ const saveToStorage = () => {
 
 const addTodoList = () => {
     const input = document.querySelector("input")
-    if (input.value === ""){
+    if (input.value === "") {
         alert("Task cannot be empty")
         return
     }
-
     todo.todoList.push(input.value)
     input.value = ""
-    loadTodoList(todo.todoList[todo.todoList.length-1],todo.todoList.length-1)
+    loadTodoList(todo.todoList[todo.todoList.length - 1], todo.todoList.length - 1)
     saveToStorage()
-    loadFromStorage()
+    const temp = loadFromStorage()
+    temp.lastTodoList.classList.add("opacity-0")
+    temp.lastTodoList.classList.add("transform")
+    temp.lastTodoList.classList.add("duration-1000")
+    setTimeout(function () {
+        temp.lastTodoList.classList.remove("opacity-0")
+    }, 100);
+}
+
+const smoothclear = () => {
+    localStorage.clear()
+    location.reload()
 }
 
 const loadTodoList = (input, index) => {
@@ -69,6 +82,12 @@ const loadTodoList = (input, index) => {
     doneBtn.classList.add("ring-offset-2")
     doneBtn.classList.add("ring-offset-green-200")
     doneBtn.classList.add("p-2")
+    doneBtn.classList.add("transform")
+    doneBtn.classList.add("duration-500")
+    doneBtn.classList.add("hover:scale-125")
+    doneBtn.classList.add("invisible")
+    doneBtn.classList.add("opacity-0")
+    doneBtn.classList.add("shadow-md")
     deleteBtn.classList.add("text-white")
     deleteBtn.classList.add("bg-red-600")
     deleteBtn.classList.add("hover:bg-red-700")
@@ -78,30 +97,60 @@ const loadTodoList = (input, index) => {
     deleteBtn.classList.add("ring-offset-2")
     deleteBtn.classList.add("ring-offset-red-200")
     deleteBtn.classList.add("p-2")
-    doneBtn.style.visibility = "hidden"
-    deleteBtn.style.visibility = "hidden"
+    deleteBtn.classList.add("transform")
+    deleteBtn.classList.add("duration-500")
+    deleteBtn.classList.add("hover:scale-125")
+    deleteBtn.classList.add("invisible")
+    deleteBtn.classList.add("opacity-0")
+    deleteBtn.classList.add("shadow-md")
     doneBtn.innerHTML = "Done"
     deleteBtn.innerHTML = "Delete"
     doneBtn.addEventListener("click", () => {
-        todoList.remove()
-        todo.todoList.splice(index, 1)
-        todo.finishList.push(input)
-        saveToStorage()
-        loadFromStorage()
+        deleteBtn.disabled = true
+        doneBtn.disabled = true
+        doneBtn.classList.add("animate-ping")
+        todoList.classList.add("transform")
+        todoList.classList.add("duration-1000")
+        todoList.classList.add("opacity-0")
+        setTimeout(function () {
+            todoList.remove()
+            todo.todoList.splice(index, 1)
+            todo.finishList.push(input)
+            saveToStorage()
+            const temp = loadFromStorage()
+            temp.lastFinishList.classList.add("opacity-0")
+            temp.lastFinishList.classList.add("transform")
+            temp.lastFinishList.classList.add("duration-1000")
+            setTimeout(function () {
+                temp.lastFinishList.classList.remove("opacity-0")
+            }, 100);
+        }, 900);
     })
     deleteBtn.addEventListener("click", () => {
-        todoList.remove()
-        todo.todoList.splice(index, 1)
-        saveToStorage()
-        loadFromStorage()
+        deleteBtn.disabled = true
+        doneBtn.disabled = true
+        deleteBtn.classList.add("animate-ping")
+        todoList.classList.add("transform")
+        todoList.classList.add("duration-1000")
+        todoList.classList.add("opacity-0")
+        setTimeout(function () {
+            todoList.remove()
+            todo.todoList.splice(index, 1)
+            saveToStorage()
+            loadFromStorage()
+        }, 900);
     })
     todoList.addEventListener("mouseenter", () => {
-        deleteBtn.style.visibility = "visible"
-        doneBtn.style.visibility = "visible"
+        doneBtn.classList.replace("invisible", "visible")
+        deleteBtn.classList.replace("invisible", "visible")
+        doneBtn.classList.remove("opacity-0")
+        deleteBtn.classList.remove("opacity-0")
     })
     todoList.addEventListener("mouseleave", () => {
-        deleteBtn.style.visibility = "hidden"
-        doneBtn.style.visibility = "hidden"
+        doneBtn.classList.replace("visible", "invisible")
+        deleteBtn.classList.replace("visible", "invisible")
+        doneBtn.classList.add("opacity-0")
+        deleteBtn.classList.add("opacity-0")
     })
     title.innerHTML = input
     button.append(doneBtn)
@@ -109,6 +158,7 @@ const loadTodoList = (input, index) => {
     todoList.append(title)
     todoList.append(button)
     document.getElementById("todoList").prepend(todoList)
+    return todoList
 }
 
 const loadFinishList = (input) => {
@@ -126,6 +176,7 @@ const loadFinishList = (input) => {
     title.style.textDecoration = "line-through"
     newMember.append(title)
     finishList.prepend(newMember)
+    return newMember
 }
 
 loadFromStorage()
