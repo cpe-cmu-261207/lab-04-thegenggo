@@ -183,7 +183,6 @@ const loadFinishList = (input) => {
     const title = document.createElement("div")
     newMember.classList.add("flex")
     newMember.classList.add("justify-between")
-    newMember.classList.add("h-14")
     newMember.classList.add("px-4")
     newMember.classList.add("py-2")
     newMember.classList.add("duration-1000")
@@ -198,6 +197,23 @@ const loadFinishList = (input) => {
     title.classList.add("w-full")
     title.classList.add("text-xl")
     title.classList.add("self-center")
+    title.classList.add("truncate")
+    newMember.addEventListener("mouseenter", () => {
+        newMember.classList.replace("z-0", "z-10")
+        newMember.classList.add("transform")
+        newMember.classList.add("scale-125")
+        newMember.classList.remove("border-opacity-0")
+        title.classList.remove("truncate")
+        title.classList.add("break-all")
+    })
+    newMember.addEventListener("mouseleave", () => {
+        newMember.classList.replace("z-10", "z-0")
+        newMember.classList.add("transform")
+        newMember.classList.remove("scale-125")
+        newMember.classList.add("border-opacity-0")
+        title.classList.add("truncate")
+        title.classList.remove("break-all")
+    })
     title.innerHTML = input
     title.style.textDecoration = "line-through"
     newMember.append(title)
