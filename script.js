@@ -9,13 +9,6 @@ const loadFromStorage = () => {
     if (localStorage.todo) {
         todo = JSON.parse(localStorage.todo)
     }
-    if (todo.todoList[0] && todo.finishList[0]) {
-        document.getElementById("field").classList.add("divide-y")
-        document.getElementById("field").classList.add("divide-red-400")
-    } else {
-        document.getElementById("field").classList.remove("divide-y")
-        document.getElementById("field").classList.remove("divide-red-400")
-    }
     document.getElementById("todoList").innerHTML = ""
     document.getElementById("finishList").innerHTML = ""
     let lastTodoList
@@ -45,8 +38,6 @@ const addTodoList = () => {
     saveToStorage()
     const temp = loadFromStorage()
     temp.lastTodoList.classList.add("opacity-0")
-    temp.lastTodoList.classList.add("transform")
-    temp.lastTodoList.classList.add("duration-1000")
     setTimeout(function () {
         temp.lastTodoList.classList.remove("opacity-0")
     }, 100);
@@ -68,6 +59,14 @@ const loadTodoList = (input, index) => {
     todoList.classList.add("h-14")
     todoList.classList.add("px-4")
     todoList.classList.add("py-2")
+    todoList.classList.add("duration-1000")
+    todoList.classList.add("border-opacity-0")
+    todoList.classList.add("border-2")
+    todoList.classList.add("rounded-lg")
+    todoList.classList.add("border-red-500")
+    todoList.classList.add("bg-white")
+    todoList.classList.add("relative")
+    todoList.classList.add("z-0")
     title.classList.add("w-full")
     title.classList.add("self-center")
     title.classList.add("text-xl")
@@ -130,8 +129,6 @@ const loadTodoList = (input, index) => {
         deleteBtn.disabled = true
         doneBtn.disabled = true
         deleteBtn.classList.add("animate-ping")
-        todoList.classList.add("transform")
-        todoList.classList.add("duration-1000")
         todoList.classList.add("opacity-0")
         setTimeout(function () {
             todoList.remove()
@@ -141,16 +138,24 @@ const loadTodoList = (input, index) => {
         }, 900);
     })
     todoList.addEventListener("mouseenter", () => {
+        todoList.classList.replace("z-0","z-10")
+        todoList.classList.add("transform")
         doneBtn.classList.replace("invisible", "visible")
         deleteBtn.classList.replace("invisible", "visible")
         doneBtn.classList.remove("opacity-0")
         deleteBtn.classList.remove("opacity-0")
+        todoList.classList.add("scale-125")
+        todoList.classList.remove("border-opacity-0")
     })
     todoList.addEventListener("mouseleave", () => {
+        todoList.classList.replace("z-10","z-0")
+        todoList.classList.add("transform")
         doneBtn.classList.replace("visible", "invisible")
         deleteBtn.classList.replace("visible", "invisible")
         doneBtn.classList.add("opacity-0")
         deleteBtn.classList.add("opacity-0")
+        todoList.classList.remove("scale-125")
+        todoList.classList.add("border-opacity-0")
     })
     title.innerHTML = input
     button.append(doneBtn)
@@ -166,9 +171,18 @@ const loadFinishList = (input) => {
     const newMember = document.createElement("div")
     const title = document.createElement("div")
     newMember.classList.add("flex")
+    newMember.classList.add("justify-between")
     newMember.classList.add("h-14")
     newMember.classList.add("px-4")
     newMember.classList.add("py-2")
+    newMember.classList.add("duration-1000")
+    newMember.classList.add("border-opacity-0")
+    newMember.classList.add("border-2")
+    newMember.classList.add("rounded-lg")
+    newMember.classList.add("border-red-500")
+    newMember.classList.add("bg-white")
+    newMember.classList.add("relative")
+    newMember.classList.add("z-0")
     title.classList.add("w-full")
     title.classList.add("text-xl")
     title.classList.add("self-center")
