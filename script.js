@@ -201,7 +201,7 @@ const loadFinishList = (input) => {
     newMember.addEventListener("mouseenter", () => {
         newMember.classList.replace("z-0", "z-10")
         newMember.classList.add("transform")
-        newMember.classList.add("scale-110")
+        newMember.classList.add("sm:scale-110")
         newMember.classList.remove("border-opacity-0")
         title.classList.remove("truncate")
         title.classList.add("break-all")
@@ -209,7 +209,7 @@ const loadFinishList = (input) => {
     newMember.addEventListener("mouseleave", () => {
         newMember.classList.replace("z-10", "z-0")
         newMember.classList.add("transform")
-        newMember.classList.remove("scale-110")
+        newMember.classList.remove("sm:scale-110")
         newMember.classList.add("border-opacity-0")
         title.classList.add("truncate")
         title.classList.remove("break-all")
